@@ -26,7 +26,8 @@
                 @{
                     string image = item.Image;
                     if(image != null && !image.Equals("")){
-                        <img src="~/images/@image" style="margin-top:0px; margin-left:auto; margin-right:auto; max-height:100%; width:100%; height:auto;">
+                        var postImg = item.OwnerId + "/" + item.PostId + "/" + image;
+                        <img src="~/@postImg" style="margin-top:0px; margin-left:auto; margin-right:auto; max-height:100%; width:100%; height:auto;">
                     }
                 }
                 </div>

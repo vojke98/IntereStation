@@ -93,27 +93,31 @@ namespace web.Controllers
         {
             if (ModelState.IsValid)
             {
+                string wwwroot = _hostEnvironment.WebRootPath;
+
                 AppUser AppUser = await _userManager.GetUserAsync(HttpContext.User);
                 post.Owner = AppUser;
                 post.OwnerId = AppUser.Id;
                 post.DateCreated = DateTime.Now;
 
-                string wwwroot = _hostEnvironment.WebRootPath;
-                string fileName = Path.GetFileNameWithoutExtension(post.ImageFile.FileName);
-                string extension = Path.GetExtension(post.ImageFile.FileName);
-
-                post.Image = "postImage" + extension;
+                if(post.ImageFile != null){
+                    string fileName = Path.GetFileNameWithoutExtension(post.ImageFile.FileName);
+                    string extension = Path.GetExtension(post.ImageFile.FileName);
+                    post.Image = "postImage" + extension;
+                }
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                string path = Path.Combine(wwwroot, post.OwnerId, post.PostId+"", post.Image);
-                Directory.CreateDirectory(Path.GetDirectoryName(path));
 
-                using(var fileStream = new FileStream(path, FileMode.Create))
-                {
-                    await post.ImageFile.CopyToAsync(fileStream);
+                if(post.ImageFile != null){      
+                    string path = Path.Combine(wwwroot, post.OwnerId, post.PostId+"", post.Image);
+                    Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+                    using(var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await post.ImageFile.CopyToAsync(fileStream);
+                    }
                 }
-
                 return RedirectToAction(nameof(Index));
             }
 
@@ -220,9 +224,11 @@ namespace web.Controllers
         {
             var post = await _context.Posts.FindAsync(id);
 
-            string wwwroot = _hostEnvironment.WebRootPath;
-            string folder_path = Path.Combine(wwwroot, post.OwnerId, id+"");
-            Directory.Delete(folder_path, recursive: true);
+            if(post.Image != null){
+                string wwwroot = _hostEnvironment.WebRootPath;
+                string folder_path = Path.Combine(wwwroot, post.OwnerId, id+"");
+                Directory.Delete(folder_path, recursive: true);
+            }
 
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
