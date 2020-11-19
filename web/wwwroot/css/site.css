@@ -24,6 +24,23 @@ a {
   border-color: #1861ac;
 }
 
+.like {
+  height:100%; 
+  opacity: 0.8;
+  transition: opacity .3s ease-in-out;
+  -moz-transition: opacity .3s ease-in-out;
+  -webkit-transition: opacity .3s ease-in-out;
+  padding: 2px;
+}
+.like:hover {
+  opacity: 1.0;
+  transition: opacity .3s ease-out;
+  -moz-transition: opacity .3s ease-out;
+  -webkit-transition: opacity .3s ease-out;
+  padding: 2px;
+}​
+
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
