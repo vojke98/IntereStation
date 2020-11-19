@@ -1,0 +1,57 @@
+@model IEnumerable<web.Models.Post>
+
+@{
+    ViewData["Title"] = "Posts";
+    var uId =  ViewData["CurrentUserId"];
+}
+
+<h1>My Posts</h1>
+
+<p>
+    <a asp-action="Create">Share your interest</a>
+</p>
+<table class="table">
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+        <td style="border-top-color:#121212;">
+            <div style="background-color:#242424; margin-left:20%; margin-right:20%; text-align:left; word-wrap:break-word; border-radius:10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                <p style="margin-bottom: 0px; color:#cdcdcd; text-align:left; margin-left:10px; margin-top:5px;">
+                    <b>@Html.DisplayFor(modelItem => item.Owner.UserName)</b>
+                    <span style="margin-right:10px; margin-top:5px; color:gray; font-size:70%; float:right;">
+                        Shared at @Html.DisplayFor(modelItem => item.DateCreated)
+                    </span>
+                </p>
+                <div>
+                @{
+                    string image = item.Image;
+                    if(image != null && !image.Equals("")){
+                        <img src="~/images/@image" style="margin-top:0px; margin-left:auto; margin-right:auto; max-height:100%; width:100%; height:auto;">
+                    }
+                }
+                </div>
+                <div style="background-color: #353535; max-height:2%"><p style="color:white; margin-bottom:0px; margin-left:10px; margin-right:10px;">@Html.DisplayFor(modelItem => item.Text)</p></div>
+                    <p style="margin-left:10px; margin-bottom:5px; color:#aaaaaa; font-size:90%;">
+                        <span>
+                            @Html.DisplayFor(modelItem => item.Likes.Count)
+                        </span>
+                        <a href="@Url.Action("Create", "Likes", new { PostId = item.PostId })" title="List View" class="links">
+                            <img style="height:20px;" src="@Url.Content("~/images/like.png")"> 
+                        </a>
+                        <span style="float:right; margin-right:10px">
+                            @{
+                                if(uId.Equals(item.OwnerId)){
+                                        <a asp-action="Edit" asp-route-id="@item.PostId">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@item.PostId">Delete</a>
+                                }else{
+                                    <br>
+                                }
+                            }
+                        </span>
+                    </p>
+                </div>
+        </td>
+    </tr>
+}
+    </tbody>
+</table>

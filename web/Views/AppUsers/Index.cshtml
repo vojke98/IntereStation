@@ -1,0 +1,35 @@
+@model IEnumerable<web.Models.AppUser>
+
+@{
+    ViewData["Title"] = "Find users";
+}
+
+<h1>Users</h1>
+<form asp-controller="AppUsers" asp-action="Index" method="GET">
+    <p>
+        <input type="text" class="form-control" name="SearchString" style="width:20%; margin-bottom:10px">
+        <input type="submit" value="Search" class="btn btn-primary"/>
+    </p>
+</form>
+<table class="table">
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <div>
+                    <a asp-action="Details" asp-route-id="@item.Id" title="List View" style="color:#cdcdcd"><b><u>@Html.DisplayFor(modelItem => item.UserName)</u></b></a>
+                </div>
+                <div>
+                    <p style="color:#bcbcbc">@Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)</p>
+                </div>
+                <div>
+                    <a asp-action="Details" asp-route-id="@item.Id" title="List View" class="links">View profile</a>
+                </div>
+                <div>
+                    <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = item.Id })" title="List View" class="links">Send Friend Request</a>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
