@@ -6,24 +6,23 @@ namespace web.Models
 {
     public class Friend
     {
-
         [ForeignKey("RequestedBy_Id")]
         public string RequestedBy_Id { get; set; }
-        public virtual AppUser ByUser { get; set; }
-
+        public virtual AppUser RequestedBy { get; set; }
         [ForeignKey("RequestedTo_Id")]
         public string RequestedTo_Id { get; set; }
-        public virtual AppUser ToUser { get; set; }
+        public virtual AppUser RequestedTo { get; set; }
 
-        public DateTime? RequestTime { get; set; }
+        public DateTime? FriendsSince { get; set; }
 
-        public FriendRequestFlag FriendRequestFlag { get; set; }
+        public Status Status { get; set; }
     }
 
-    public enum FriendRequestFlag
+    public enum Status
     {
         None,
         Approved,
-        Rejected
+        Rejected,
+        Blocked
     };
 }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,11 +19,13 @@ namespace web.Controllers
     {
         private readonly ISDBContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IWebHostEnvironment _hostEnvironment;
         
-        public PostsController(ISDBContext context, UserManager<AppUser> userManager)
+        public PostsController(ISDBContext context, UserManager<AppUser> userManager, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             _userManager = userManager;
+            _hostEnvironment = hostEnvironment;
         }
         
 
@@ -29,7 +33,9 @@ namespace web.Controllers
         public async Task<IActionResult> Index()
         {
             var uId =  _userManager.GetUserId(User);
-            ViewData["CurrentUserId"] = uId;            
+            ViewData["CurrentUserId"] = uId;
+            string wwwroot = _hostEnvironment.WebRootPath;            
+            ViewData["wwwroot"] = wwwroot;
 
             var iSDBContext = _context.Posts.Include(p => p.Owner).Include(p => p.Type).OrderByDescending(p => p.DateCreated).Include(p => p.Likes);
             return View(await iSDBContext.ToListAsync());
@@ -83,7 +89,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostId,Text,TypeId,Image")] Post post)
+        public async Task<IActionResult> Create([Bind("PostId,Text,TypeId,ImageFile")] Post post)
         {
             if (ModelState.IsValid)
             {
@@ -91,8 +97,23 @@ namespace web.Controllers
                 post.Owner = AppUser;
                 post.OwnerId = AppUser.Id;
                 post.DateCreated = DateTime.Now;
+
+                string wwwroot = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(post.ImageFile.FileName);
+                string extension = Path.GetExtension(post.ImageFile.FileName);
+
+                post.Image = "postImage" + extension;
+
                 _context.Add(post);
                 await _context.SaveChangesAsync();
+                string path = Path.Combine(wwwroot, post.OwnerId, post.PostId+"", post.Image);
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+                using(var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await post.ImageFile.CopyToAsync(fileStream);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -188,7 +209,7 @@ namespace web.Controllers
             {
                 return NotFound();
             }
-
+            
             return View(post);
         }
 
@@ -198,6 +219,11 @@ namespace web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var post = await _context.Posts.FindAsync(id);
+
+            string wwwroot = _hostEnvironment.WebRootPath;
+            string folder_path = Path.Combine(wwwroot, post.OwnerId, id+"");
+            Directory.Delete(folder_path, recursive: true);
+
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

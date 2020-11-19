@@ -85,7 +85,7 @@ namespace web.Controllers
         public async Task<IActionResult> SendFriendRequest(string UserId)
         {
             var CurrentUserId = _userManager.GetUserId(User);
-            Friend friend = new Friend{ RequestedBy_Id = CurrentUserId, RequestedTo_Id = UserId, RequestTime = DateTime.Now, FriendRequestFlag = FriendRequestFlag.None };
+            Friend friend = new Friend{ RequestedBy_Id = CurrentUserId, RequestedTo_Id = UserId, FriendsSince = DateTime.Now, Status = Status.None };
             Friend friendExists = await _context.Friends.FindAsync(CurrentUserId, UserId);
             
             if (ModelState.IsValid)

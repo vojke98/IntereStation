@@ -173,23 +173,23 @@ namespace web.Migrations
                 {
                     RequestedBy_Id = table.Column<string>(nullable: false),
                     RequestedTo_Id = table.Column<string>(nullable: false),
-                    ByUserId = table.Column<string>(nullable: true),
-                    ToUserId = table.Column<string>(nullable: true),
-                    RequestTime = table.Column<DateTime>(nullable: true),
-                    FriendRequestFlag = table.Column<int>(nullable: false)
+                    RequestedById = table.Column<string>(nullable: true),
+                    RequestedToId = table.Column<string>(nullable: true),
+                    FriendsSince = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Friends", x => new { x.RequestedBy_Id, x.RequestedTo_Id });
                     table.ForeignKey(
-                        name: "FK_Friends_AspNetUsers_ByUserId",
-                        column: x => x.ByUserId,
+                        name: "FK_Friends_AspNetUsers_RequestedById",
+                        column: x => x.RequestedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Friends_AspNetUsers_ToUserId",
-                        column: x => x.ToUserId,
+                        name: "FK_Friends_AspNetUsers_RequestedToId",
+                        column: x => x.RequestedToId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -312,14 +312,14 @@ namespace web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friends_ByUserId",
+                name: "IX_Friends_RequestedById",
                 table: "Friends",
-                column: "ByUserId");
+                column: "RequestedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friends_ToUserId",
+                name: "IX_Friends_RequestedToId",
                 table: "Friends",
-                column: "ToUserId");
+                column: "RequestedToId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Likes_PostId",

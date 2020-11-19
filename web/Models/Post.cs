@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace web.Models
 {
@@ -24,7 +25,11 @@ namespace web.Models
         #nullable enable
         public string? Image { get; set; }
         #nullable disable
+
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
         
+        [ForeignKey("OwnerId")]
 	    public string OwnerId { get; set; }
         public virtual AppUser Owner { get; set; }
 

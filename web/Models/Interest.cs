@@ -12,8 +12,7 @@ namespace web.Models
         [Required]
         public string Name { get; set; }
 
-        public virtual ICollection<User_Interest> User_Interests { get; set; }
-        
+        public virtual ICollection<User_Interest> User_Interests { get; set; } 
         public virtual ICollection<Post> Posts { get; set; }
     }
 }

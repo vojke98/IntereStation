@@ -250,23 +250,23 @@ namespace web.Migrations
                     b.Property<string>("RequestedTo_Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ByUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("FriendRequestFlag")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("RequestTime")
+                    b.Property<DateTime?>("FriendsSince")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ToUserId")
+                    b.Property<string>("RequestedById")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RequestedToId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("RequestedBy_Id", "RequestedTo_Id");
 
-                    b.HasIndex("ByUserId");
+                    b.HasIndex("RequestedById");
 
-                    b.HasIndex("ToUserId");
+                    b.HasIndex("RequestedToId");
 
                     b.ToTable("Friends");
                 });
@@ -402,19 +402,19 @@ namespace web.Migrations
 
             modelBuilder.Entity("web.Models.Friend", b =>
                 {
-                    b.HasOne("web.Models.AppUser", "ByUser")
+                    b.HasOne("web.Models.AppUser", "RequestedBy")
                         .WithMany()
-                        .HasForeignKey("ByUserId");
+                        .HasForeignKey("RequestedById");
 
-                    b.HasOne("web.Models.AppUser", "ToUser")
+                    b.HasOne("web.Models.AppUser", "RequestedTo")
                         .WithMany()
-                        .HasForeignKey("ToUserId");
+                        .HasForeignKey("RequestedToId");
                 });
 
             modelBuilder.Entity("web.Models.Post", b =>
                 {
                     b.HasOne("web.Models.AppUser", "Owner")
-                        .WithMany()
+                        .WithMany("Posts")
                         .HasForeignKey("OwnerId");
 
                     b.HasOne("web.Models.Interest", "Type")
