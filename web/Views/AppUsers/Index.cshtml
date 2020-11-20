@@ -16,6 +16,17 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                <div style="width:48px; height:48px; float:left; margin-right:5px">
+                    @{
+                        string imgSrc = "";
+                        if(item.profilePic != null && !item.profilePic.Equals("")){
+                            imgSrc = "userFiles/" + item.Id + "/" + item.profilePic;
+                        }else{
+                            imgSrc = "images/avatar.webp";
+                        }
+                    }
+                    <img src="~/@imgSrc" style="height: 100%; width: 100%; object-fit: cover; border-radius:50%;">
+                </div>
                 <div>
                     <a asp-action="Details" asp-route-id="@item.Id" title="List View" style="color:#cdcdcd"><b><u>@Html.DisplayFor(modelItem => item.UserName)</u></b></a>
                 </div>
