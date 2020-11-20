@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,9 @@ namespace web.Models
         [Required]
         public string LastName { get; set; }
 
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
+        
         public string profilePic { get; set; }
 
         public virtual ICollection<Like> Likes { get; set; }

@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,11 +20,13 @@ namespace web.Controllers
     {
         private readonly ISDBContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public AppUsersController(ISDBContext context, UserManager<AppUser> userManager)
+        public AppUsersController(ISDBContext context, UserManager<AppUser> userManager, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             _userManager = userManager;
+            _hostEnvironment = hostEnvironment;
         }
 
         public async Task<IActionResult> Index(string searchString)
@@ -189,6 +194,74 @@ namespace web.Controllers
         private bool AppUserExists(string id)
         {
             return _context.Users.Any(e => e.Id == id);
+        }
+
+
+        // GET: AppUsers/Edit/5
+        public async Task<IActionResult> SetProfilePicture()
+        {
+            string id = _userManager.GetUserId(User);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var appUser = await _context.Users.FindAsync(id);
+            if (appUser == null)
+            {
+                return NotFound();
+            }
+            return View(appUser);
+        }
+
+        // POST: AppUsers/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetProfilePicture(string id, [Bind("FirstName,LastName,ImageFile,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] AppUser appUser)
+        {
+            //string id = _userManager.GetUserId(User);
+            
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string wwwroot = _hostEnvironment.WebRootPath;
+
+                    if(appUser.ImageFile != null){
+                        string fileName = Path.GetFileNameWithoutExtension(appUser.ImageFile.FileName);
+                        string extension = Path.GetExtension(appUser.ImageFile.FileName);
+                        appUser.profilePic = "profilePic" + extension;
+
+                        string path = Path.Combine(wwwroot,"userFiles" , appUser.Id, "profilePic" + extension);
+                        Directory.CreateDirectory(Path.GetDirectoryName(path));
+                        using(var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await appUser.ImageFile.CopyToAsync(fileStream);
+                        }
+                    }
+
+                    _context.Update(appUser);
+                    await _context.SaveChangesAsync();
+
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AppUserExists(appUser.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("SetProfilePicture", "AppUsers");
+                //return RedirectToAction(nameof(Index));
+            }  
+            return View(appUser);
         }
     }
 }

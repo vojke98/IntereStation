@@ -104,20 +104,22 @@ namespace web.Controllers
                     string fileName = Path.GetFileNameWithoutExtension(post.ImageFile.FileName);
                     string extension = Path.GetExtension(post.ImageFile.FileName);
                     post.Image = "postImage" + extension;
-                }
 
-                _context.Add(post);
-                await _context.SaveChangesAsync();
-
-                if(post.ImageFile != null){      
-                    string path = Path.Combine(wwwroot,"userFiles" , post.OwnerId, post.PostId+"", post.Image);
+                    string path = Path.Combine(wwwroot,"userFiles" , post.OwnerId, post.PostId+"", "postImage" + extension);
                     Directory.CreateDirectory(Path.GetDirectoryName(path));
-
                     using(var fileStream = new FileStream(path, FileMode.Create))
                     {
                         await post.ImageFile.CopyToAsync(fileStream);
                     }
                 }
+
+                _context.Add(post);
+                await _context.SaveChangesAsync();
+
+                /*if(post.ImageFile != null){      
+                    
+                }*/
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -149,6 +151,7 @@ namespace web.Controllers
             }
             ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", post.OwnerId);
             ViewData["TypeId"] = new SelectList(_context.Interests, "InterestId", "Name", post.TypeId);
+            
             return View(post);
         }
 

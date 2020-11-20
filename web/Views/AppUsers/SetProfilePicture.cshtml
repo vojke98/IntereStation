@@ -1,0 +1,92 @@
+@model web.Models.AppUser
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Set Profile Picture</h1>
+
+<h4>AppUser</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SetProfilePicture" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="hidden" asp-for="FirstName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="LastName" class="form-control" />
+            </div>
+
+            <div style="width:180px; height:180px; position:relative;">
+                @{
+                    string imgSrc = "";
+                    if(Model.profilePic != null && !Model.profilePic.Equals("")){
+                        imgSrc = "userFiles/" + Model.Id + "/" + Model.profilePic;
+                    }else{
+                        imgSrc = "images/avatar.webp";
+                    }
+                }
+                <img src="~/@imgSrc" style="height: 100%; width: 100%; object-fit: cover; border-radius:50%;">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label">Choose profile picture</label>
+                <input asp-for="ImageFile" accept="image/*"/>
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input type="hidden" asp-for="UserName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="NormalizedUserName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="NormalizedEmail" class="form-control" />
+            </div>
+            <div class="form-group form-check">
+                <input type="hidden" class="form-check-input" asp-for="EmailConfirmed" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="PasswordHash" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="SecurityStamp" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="ConcurrencyStamp" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="PhoneNumber" class="form-control" />
+            </div>
+            <div class="form-group form-check">
+                <input type="hidden" class="form-check-input" asp-for="PhoneNumberConfirmed" />
+            </div>
+            <div class="form-group form-check">
+                <input type="hidden" class="form-check-input" asp-for="TwoFactorEnabled" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="LockoutEnd" class="form-control" />
+            </div>
+            <div class="form-group form-check">
+                <input type="hidden" class="form-check-input" asp-for="LockoutEnabled" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="AccessFailedCount" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
