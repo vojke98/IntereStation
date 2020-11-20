@@ -13,6 +13,8 @@ namespace web.Models
         [Required]
         public string LastName { get; set; }
 
+        public string profilePic { get; set; }
+
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
 

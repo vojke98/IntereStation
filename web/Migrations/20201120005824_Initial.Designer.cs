@@ -10,7 +10,7 @@ using web.Data;
 namespace web.Migrations
 {
     [DbContext(typeof(ISDBContext))]
-    [Migration("20201119220259_Initial")]
+    [Migration("20201120005824_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -230,6 +230,9 @@ namespace web.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<string>("profilePic")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

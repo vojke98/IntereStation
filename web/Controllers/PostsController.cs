@@ -110,7 +110,7 @@ namespace web.Controllers
                 await _context.SaveChangesAsync();
 
                 if(post.ImageFile != null){      
-                    string path = Path.Combine(wwwroot, post.OwnerId, post.PostId+"", post.Image);
+                    string path = Path.Combine(wwwroot,"userFiles" , post.OwnerId, post.PostId+"", post.Image);
                     Directory.CreateDirectory(Path.GetDirectoryName(path));
 
                     using(var fileStream = new FileStream(path, FileMode.Create))
@@ -226,8 +226,10 @@ namespace web.Controllers
 
             if(post.Image != null){
                 string wwwroot = _hostEnvironment.WebRootPath;
-                string folder_path = Path.Combine(wwwroot, post.OwnerId, id+"");
-                Directory.Delete(folder_path, recursive: true);
+                string folder_path = Path.Combine(wwwroot, "userFiles", post.OwnerId, id+"");
+                if (Directory.Exists(folder_path)){ 
+                    Directory.Delete(folder_path, recursive: true);
+                }
             }
 
             _context.Posts.Remove(post);

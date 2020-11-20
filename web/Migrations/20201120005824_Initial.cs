@@ -41,7 +41,8 @@ namespace web.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: false)
+                    LastName = table.Column<string>(nullable: false),
+                    profilePic = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
