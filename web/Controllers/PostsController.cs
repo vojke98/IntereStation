@@ -105,20 +105,19 @@ namespace web.Controllers
                     string extension = Path.GetExtension(post.ImageFile.FileName);
                     post.Image = "postImage" + extension;
 
-                    string path = Path.Combine(wwwroot,"userFiles" , post.OwnerId, post.PostId+"", "postImage" + extension);
+                }
+
+                _context.Add(post);
+                await _context.SaveChangesAsync();
+
+                if(post.ImageFile != null){      
+                    string path = Path.Combine(wwwroot,"userFiles" , post.OwnerId, post.PostId+"", post.Image);
                     Directory.CreateDirectory(Path.GetDirectoryName(path));
                     using(var fileStream = new FileStream(path, FileMode.Create))
                     {
                         await post.ImageFile.CopyToAsync(fileStream);
                     }
                 }
-
-                _context.Add(post);
-                await _context.SaveChangesAsync();
-
-                /*if(post.ImageFile != null){      
-                    
-                }*/
 
                 return RedirectToAction(nameof(Index));
             }
