@@ -247,27 +247,22 @@ namespace web.Migrations
 
             modelBuilder.Entity("web.Models.Friend", b =>
                 {
-                    b.Property<string>("RequestedBy_Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RequestedTo_Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("FriendsSince")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("RequestedById")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RequestedToId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("FriendRequestFlag")
                         .HasColumnType("int");
 
-                    b.HasKey("RequestedBy_Id", "RequestedTo_Id");
+                    b.Property<DateTime?>("FriendSince")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("RequestedById");
+                    b.Property<DateTime?>("RequestTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RequestedById", "RequestedToId");
 
                     b.HasIndex("RequestedToId");
 
@@ -406,12 +401,16 @@ namespace web.Migrations
             modelBuilder.Entity("web.Models.Friend", b =>
                 {
                     b.HasOne("web.Models.AppUser", "RequestedBy")
-                        .WithMany()
-                        .HasForeignKey("RequestedById");
+                        .WithMany("SentFriendRequests")
+                        .HasForeignKey("RequestedById")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
 
                     b.HasOne("web.Models.AppUser", "RequestedTo")
-                        .WithMany()
-                        .HasForeignKey("RequestedToId");
+                        .WithMany("ReceievedFriendRequests")
+                        .HasForeignKey("RequestedToId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("web.Models.Post", b =>

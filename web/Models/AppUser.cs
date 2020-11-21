@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace web.Models
 {
@@ -22,7 +21,9 @@ namespace web.Models
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
 
-        //public virtual ICollection<Friend> Friends { get; set; }
+        public virtual ICollection<Friend> SentFriendRequests { get; set; }
+        public virtual ICollection<Friend> ReceievedFriendRequests { get; set; }
+
         public virtual ICollection<User_Interest> User_Interests { get; set; }
     }
 }

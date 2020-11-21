@@ -46,15 +46,15 @@ namespace web.Controllers
         // GET: AppUsers/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            
             var uId =  _userManager.GetUserId(User);
             ViewData["CurrentUserId"] = uId;
+            
+            if (id == null)
+            {
+                id = uId;
+            } 
 
-            var appUser = await _context.Users
+            var appUser = await _context.Users.Include(r => r.ReceievedFriendRequests).Include(s => s.SentFriendRequests)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appUser == null)
             {
@@ -87,24 +87,30 @@ namespace web.Controllers
         }
 
 
-        public async Task<IActionResult> SendFriendRequest(string UserId)
+        public async Task<IActionResult> SendFriendRequest(string UserId, bool accept = true)
         {
             var CurrentUserId = _userManager.GetUserId(User);
-            Friend friend = new Friend{ RequestedBy_Id = CurrentUserId, RequestedTo_Id = UserId, FriendsSince = DateTime.Now, Status = Status.None };
-            Friend friendExists = await _context.Friends.FindAsync(CurrentUserId, UserId);
-            
+
+            Friend requestSent = await _context.Friends.FindAsync(CurrentUserId, UserId);
+            Friend requestRecieved = await _context.Friends.FindAsync(UserId, CurrentUserId);
+    
             if (ModelState.IsValid)
             {
                 
-                if(friendExists == null)
-                {
+                if(requestSent == null && requestRecieved == null){
+                    Friend friend = new Friend{ RequestedById = CurrentUserId, RequestedToId = UserId, RequestTime = DateTime.Now, FriendRequestFlag = FriendRequestFlag.Pending };
                     _context.Add(friend);
-                    await _context.SaveChangesAsync();
-                }else
-                {
-                    _context.Remove(friendExists);
-                    await _context.SaveChangesAsync();
+                }else if(requestSent != null){
+                    _context.Remove(requestSent);
+                }else if(requestRecieved != null && accept){
+                    requestRecieved.FriendRequestFlag = FriendRequestFlag.Approved;
+                    _context.Update(requestRecieved);
+                }else if(requestRecieved != null && !accept){
+                    _context.Remove(requestRecieved);
+                }else{
+                    //mislim da su to sve opcije
                 }
+                await _context.SaveChangesAsync();
             }
             
             return RedirectToAction("Details", "AppUsers", new {id = UserId});

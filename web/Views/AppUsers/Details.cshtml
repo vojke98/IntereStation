@@ -2,10 +2,10 @@
 
 @{
     ViewData["Title"] = "User Profile";
-    var uId =  ViewData["CurrentUserId"];
+    var uId =  ViewData["CurrentUserId"] as string;
 }
 
-<h1>User Profile</h1><br>
+<h1>@Html.DisplayFor(model => model.UserName)</h1><br>
 
 <div>
     <div style="width:180px; height:180px;">
@@ -19,7 +19,9 @@
         }
         <img src="~/@imgSrc" style="height: 100%; width: 100%; object-fit: cover; border-radius:50%;">
     </div>
-    <h4>@Html.DisplayFor(model => model.UserName)</h4>
+    @if(Model.Id == uId){
+        <a asp-area="" asp-controller="AppUsers" asp-action="SetProfilePicture">Change Profile Picture</a>
+    }
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -42,9 +44,52 @@
         </dd>
         <dd>
             @if(!Model.Id.Equals(uId)){
-                <div>
-                    <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id })" title="List View" class="links">Send Friend Request</a>
-                </div>
+                if(Model.ReceievedFriendRequests.Any(u => u.RequestedById == uId)){
+                    var caseSwitch = Model.ReceievedFriendRequests.First(u => u.RequestedById == uId);
+                        switch (caseSwitch.FriendRequestFlag)
+                        {
+                            case FriendRequestFlag.Pending:
+                                <div>
+                                    <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id })" title="List View" class="links">Unsend Friend Request</a>
+                                </div>
+                                break;
+                            case FriendRequestFlag.Approved:
+                                <div>
+                                    <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id })" title="List View" class="links">Remove from Friends</a>
+                                </div>
+                                break;
+                            default:
+                                <div>
+                                    <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id })" title="List View" class="links">You cannot Friend this user</a>
+                                </div>
+                                break;
+                        }
+                }else if(Model.SentFriendRequests.Any(u => u.RequestedToId == uId)){
+                        var caseSwitch = Model.SentFriendRequests.First(u => u.RequestedToId == uId);
+                        switch (caseSwitch.FriendRequestFlag)
+                        {
+                            case FriendRequestFlag.Pending:
+                                <div>
+                                    <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id})" title="List View" class="links">Accept Friend Request</a>
+                                    <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id, accept = false })" title="List View" class="links">Reject Friend Request</a>
+                                </div>
+                                break;
+                            case FriendRequestFlag.Approved:
+                                <div>
+                                    <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id })" title="List View" class="links">Remove from Friends</a>
+                                </div>
+                                break;
+                            default:
+                                <div>
+                                    <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id })" title="List View" class="links">You cannot Friend this user</a>
+                                </div>
+                                break;
+                        }
+                }else{
+                    <div>
+                        <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id })" title="List View" class="links">Send Friend Request</a>
+                    </div>
+                }         
             }   
         </dd>
     </dl>

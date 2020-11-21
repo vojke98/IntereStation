@@ -172,28 +172,25 @@ namespace web.Migrations
                 name: "Friends",
                 columns: table => new
                 {
-                    RequestedBy_Id = table.Column<string>(nullable: false),
-                    RequestedTo_Id = table.Column<string>(nullable: false),
-                    RequestedById = table.Column<string>(nullable: true),
-                    RequestedToId = table.Column<string>(nullable: true),
-                    FriendsSince = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<int>(nullable: false)
+                    RequestedById = table.Column<string>(nullable: false),
+                    RequestedToId = table.Column<string>(nullable: false),
+                    RequestTime = table.Column<DateTime>(nullable: true),
+                    FriendSince = table.Column<DateTime>(nullable: true),
+                    FriendRequestFlag = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Friends", x => new { x.RequestedBy_Id, x.RequestedTo_Id });
+                    table.PrimaryKey("PK_Friends", x => new { x.RequestedById, x.RequestedToId });
                     table.ForeignKey(
                         name: "FK_Friends_AspNetUsers_RequestedById",
                         column: x => x.RequestedById,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Friends_AspNetUsers_RequestedToId",
                         column: x => x.RequestedToId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -311,11 +308,6 @@ namespace web.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Friends_RequestedById",
-                table: "Friends",
-                column: "RequestedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Friends_RequestedToId",

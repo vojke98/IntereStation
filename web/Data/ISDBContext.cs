@@ -22,7 +22,21 @@ namespace web.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Like>().HasKey(l => new { l.UserId, l.PostId });
             modelBuilder.Entity<User_Interest>().HasKey(ui => new { ui.UserId, ui.InterestId });
-            modelBuilder.Entity<Friend>().HasKey(f => new { f.RequestedBy_Id, f.RequestedTo_Id });
+            modelBuilder.Entity<Friend>().HasKey(f => new { f.RequestedById, f.RequestedToId });
+
+            modelBuilder.Entity<Friend>()
+                .HasOne(a => a.RequestedBy)
+                .WithMany(b => b.SentFriendRequests)
+                .HasForeignKey(c => c.RequestedById)
+                .OnDelete(DeleteBehavior.ClientNoAction)
+                .IsRequired();
+
+            modelBuilder.Entity<Friend>()
+                .HasOne(a => a.RequestedTo)
+                .WithMany(b => b.ReceievedFriendRequests)
+                .HasForeignKey(c => c.RequestedToId)
+                .OnDelete(DeleteBehavior.ClientNoAction)
+                .IsRequired();
         }
     }
 }

@@ -10,7 +10,7 @@ using web.Data;
 namespace web.Migrations
 {
     [DbContext(typeof(ISDBContext))]
-    [Migration("20201120143831_Initial")]
+    [Migration("20201121153226_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -249,27 +249,22 @@ namespace web.Migrations
 
             modelBuilder.Entity("web.Models.Friend", b =>
                 {
-                    b.Property<string>("RequestedBy_Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RequestedTo_Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("FriendsSince")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("RequestedById")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RequestedToId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("FriendRequestFlag")
                         .HasColumnType("int");
 
-                    b.HasKey("RequestedBy_Id", "RequestedTo_Id");
+                    b.Property<DateTime?>("FriendSince")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("RequestedById");
+                    b.Property<DateTime?>("RequestTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RequestedById", "RequestedToId");
 
                     b.HasIndex("RequestedToId");
 
@@ -408,12 +403,16 @@ namespace web.Migrations
             modelBuilder.Entity("web.Models.Friend", b =>
                 {
                     b.HasOne("web.Models.AppUser", "RequestedBy")
-                        .WithMany()
-                        .HasForeignKey("RequestedById");
+                        .WithMany("SentFriendRequests")
+                        .HasForeignKey("RequestedById")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
 
                     b.HasOne("web.Models.AppUser", "RequestedTo")
-                        .WithMany()
-                        .HasForeignKey("RequestedToId");
+                        .WithMany("ReceievedFriendRequests")
+                        .HasForeignKey("RequestedToId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("web.Models.Post", b =>

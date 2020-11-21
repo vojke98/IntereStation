@@ -13,7 +13,7 @@
                 @{
                     string imgSrc = "";
                     var user = UserManager.GetUserAsync(User).Result;
-                    if(user.profilePic != null){
+                    if(user != null && user.profilePic != null){
                         imgSrc = "userFiles/" + user.Id + "/" + user.profilePic;
                     }else{
                         imgSrc = "images/avatar.webp";
