@@ -11,8 +11,8 @@
         <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
             <div style="height:32px; width:32px; float:left; margin-right:5px">
                 @{
-                    string imgSrc = "";
                     var user = UserManager.GetUserAsync(User).Result;
+                    string imgSrc = "";
                     if(user != null && user.profilePic != null){
                         imgSrc = "userFiles/" + user.Id + "/" + user.profilePic;
                     }else{
@@ -32,9 +32,6 @@
 }
 else
 {
-    <!--<li class="nav-item">
-        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>-->
     <li class="nav-item">
         <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>

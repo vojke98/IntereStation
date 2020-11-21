@@ -44,12 +44,12 @@ namespace web.Controllers
         }
 
         // GET: AppUsers/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string id, bool cur = false)
         {
             var uId =  _userManager.GetUserId(User);
             ViewData["CurrentUserId"] = uId;
             
-            if (id == null)
+            if (id == null || cur == true)
             {
                 id = uId;
             } 
@@ -272,6 +272,26 @@ namespace web.Controllers
                 return RedirectToAction("SetProfilePicture", "AppUsers");
                 //return RedirectToAction(nameof(Index));
             }  
+            return View(appUser);
+        }
+
+        public async Task<IActionResult> FriendRequests(string id)
+        {
+            var uId =  _userManager.GetUserId(User);
+            ViewData["CurrentUserId"] = uId;
+            
+            if (id == null)
+            {
+                id = uId;
+            } 
+
+            var appUser = await _context.Users.Include(r => r.ReceievedFriendRequests).ThenInclude(r => r.RequestedBy)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (appUser == null)
+            {
+                return NotFound();
+            }
+
             return View(appUser);
         }
     }

@@ -1,0 +1,33 @@
+@model web.Models.AppUser
+
+@{
+    ViewData["Title"] = "Friend requests";
+}
+
+<h1>Friend requests</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="FriendRequests" enctype="multipart/form-data">
+            <table>
+            @{
+                if(Model.ReceievedFriendRequests != null){
+                    foreach(Friend fr in Model.ReceievedFriendRequests){
+                        <tr>
+                            <td>
+                                <p>@fr.RequestedBy.FirstName @fr.RequestedBy.LastName</p>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+            </table>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Details">Back to profile</a>
+</div>
+

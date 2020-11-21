@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header>
+    <header style="border-bottom:none">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <div>
@@ -29,7 +29,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="UserPosts">My Posts</a>
                         </li>
                         <li class="nav-item" style="border-right:1px solid;">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="AppUsers" asp-action="Details">My Profile</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="AppUsers" asp-action="Details" asp-route-cur="@true">My Profile</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="AppUsers" asp-action="Index">Search Users</a>

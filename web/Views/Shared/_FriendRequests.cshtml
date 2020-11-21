@@ -1,0 +1,18 @@
+@using Microsoft.AspNetCore.Identity
+@using web.Models
+
+@inject UserManager<AppUser> UserManager
+
+<a asp-area="" asp-controller="AppUsers" asp-action="FriendRequests" asp-route-id="@Model.Id">
+    <div>
+        @{
+            var user = UserManager.GetUserAsync(User).Result;
+
+            int req = 0;
+            if(user != null && user.ReceievedFriendRequests != null){
+                req = user.ReceievedFriendRequests.Count();
+            }
+        }
+        Friend requests: @req
+    </div>
+</a>
