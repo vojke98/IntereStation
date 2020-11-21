@@ -100,13 +100,18 @@ namespace web.Controllers
                 if(requestSent == null && requestRecieved == null){
                     Friend friend = new Friend{ RequestedById = CurrentUserId, RequestedToId = UserId, RequestTime = DateTime.Now, FriendRequestFlag = FriendRequestFlag.Pending };
                     _context.Add(friend);
+
                 }else if(requestSent != null){
                     _context.Remove(requestSent);
+
                 }else if(requestRecieved != null && accept){
+                    requestRecieved.FriendSince = DateTime.Now;
                     requestRecieved.FriendRequestFlag = FriendRequestFlag.Approved;
                     _context.Update(requestRecieved);
+
                 }else if(requestRecieved != null && !accept){
                     _context.Remove(requestRecieved);
+
                 }else{
                     //mislim da su to sve opcije
                 }
