@@ -12,8 +12,8 @@
         <form asp-action="FriendRequests" enctype="multipart/form-data">
             <table>
             @{
-                if(Model.ReceievedFriendRequests != null){
-                    foreach(Friend fr in Model.ReceievedFriendRequests){
+                if(Model.ReceievedFriendRequests.Where(r => !r.Approved) != null){
+                    foreach(Friend fr in Model.ReceievedFriendRequests.Where(r => !r.Approved)){
                         <tr>
                             <td>
                                 <p>@fr.RequestedBy.FirstName @fr.RequestedBy.LastName</p>

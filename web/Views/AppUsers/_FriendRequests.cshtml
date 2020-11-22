@@ -10,7 +10,7 @@
 
             int req = 0;
             if(user != null && user.ReceievedFriendRequests != null){
-                req = user.ReceievedFriendRequests.Count();
+                req = user.ReceievedFriendRequests.Where(r => !r.Approved).Count();
             }
         }
         Friend requests: @req
