@@ -20,7 +20,8 @@
         <img src="~/@imgSrc" style="height: 100%; width: 100%; object-fit: cover; border-radius:50%;">
     </div>
     @if(Model.Id == uId){
-        <a asp-area="" asp-controller="AppUsers" asp-action="SetProfilePicture">Change Profile Picture</a>
+        <a asp-area="" asp-controller="AppUsers" asp-action="SetProfilePicture">Change Profile Picture</a><br>
+        <a asp-area="" asp-controller="AppUsers" asp-action="SetInterests">Set Interests</a>
     }
     <hr/>
     <dl class="row">
@@ -42,16 +43,16 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
-        <dt>
-            @if(Model.Id == uId){
+        @if(Model.Id == uId){
+            <dt style="padding-left:15px">
                 <partial name="_FriendRequests"></partial>
-            }
-        </dt>
-        <dd>
+            </dt>
+        }
+        <dt style="padding-left:15px">
             @if(!Model.Id.Equals(uId)){
                 if(Model.ReceievedFriendRequests.Any(u => u.RequestedById == uId)){
-                    var caseSwitch = Model.ReceievedFriendRequests.First(u => u.RequestedById == uId);
-                        switch (caseSwitch.FriendRequestFlag)
+                    var flag = Model.ReceievedFriendRequests.First(u => u.RequestedById == uId).FriendRequestFlag;
+                        switch (flag)
                         {
                             case FriendRequestFlag.Pending:
                                 <div>
@@ -70,8 +71,8 @@
                                 break;
                         }
                 }else if(Model.SentFriendRequests.Any(u => u.RequestedToId == uId)){
-                        var caseSwitch = Model.SentFriendRequests.First(u => u.RequestedToId == uId);
-                        switch (caseSwitch.FriendRequestFlag)
+                        var flag = Model.SentFriendRequests.First(u => u.RequestedToId == uId).FriendRequestFlag;
+                        switch (flag)
                         {
                             case FriendRequestFlag.Pending:
                                 <div>
@@ -94,8 +95,8 @@
                     <div>
                         <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = Model.Id })" title="List View" class="links">Send Friend Request</a>
                     </div>
-                }         
-            }   
-        </dd>
+                }
+            }
+        </dt>
     </dl>
 </div>

@@ -17,6 +17,27 @@
                         <tr>
                             <td>
                                 <p>@fr.RequestedBy.FirstName @fr.RequestedBy.LastName</p>
+                                @{
+                                    var flag = fr.FriendRequestFlag;
+                                    switch (flag){
+                                        case FriendRequestFlag.Pending:
+                                            <div>
+                                                <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = fr.RequestedById, fr = true })" title="List View" class="links">Accept Friend Request</a> |
+                                                <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = fr.RequestedById, accept = false, fr = true })" title="List View" class="links">Reject Friend Request</a>
+                                            </div>
+                                            break;
+                                        case FriendRequestFlag.Approved:
+                                            <div>
+                                                <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = fr.RequestedById, accept = false, fr = true })" title="List View" class="links">Remove from Friends</a>
+                                            </div>
+                                            break;
+                                        default:
+                                            <div>
+                                                <a href="@Url.Action("SendFriendRequest", "AppUsers", new { UserId = fr.RequestedById, fr = true })" title="List View" class="links">You cannot Friend this user</a>
+                                            </div>
+                                            break;
+                                    }
+                                }
                             </td>
                         </tr>
                     }

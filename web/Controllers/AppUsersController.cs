@@ -54,7 +54,7 @@ namespace web.Controllers
                 id = uId;
             } 
 
-            var appUser = await _context.Users.Include(r => r.ReceievedFriendRequests).Include(s => s.SentFriendRequests)
+            var appUser = await _context.Users.Include(r => r.ReceievedFriendRequests).Include(s => s.SentFriendRequests).Include(p => p.Posts)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (appUser == null)
             {
@@ -87,7 +87,7 @@ namespace web.Controllers
         }
 
 
-        public async Task<IActionResult> SendFriendRequest(string UserId, bool accept = true)
+        public async Task<IActionResult> SendFriendRequest(string UserId, bool accept = true, bool fr = false)
         {
             var CurrentUserId = _userManager.GetUserId(User);
 
@@ -111,13 +111,14 @@ namespace web.Controllers
 
                 }else if(requestRecieved != null && !accept){
                     _context.Remove(requestRecieved);
-
                 }else{
                     //mislim da su to sve opcije
                 }
                 await _context.SaveChangesAsync();
             }
-            
+            if(fr){
+                return RedirectToAction("FriendRequests", "AppUsers");
+            }
             return RedirectToAction("Details", "AppUsers", new {id = UserId});
         }
 

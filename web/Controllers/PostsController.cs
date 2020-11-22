@@ -30,30 +30,26 @@ namespace web.Controllers
         
 
         // GET: Posts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool cur = false)
         {
             var uId =  _userManager.GetUserId(User);
             ViewData["CurrentUserId"] = uId;
             string wwwroot = _hostEnvironment.WebRootPath;            
             ViewData["wwwroot"] = wwwroot;
+            ViewData["Title"] = "Home";
 
-            var iSDBContext = _context.Posts.Include(p => p.Owner).Include(p => p.Type).OrderByDescending(p => p.DateCreated).Include(p => p.Likes);
-            return View(await iSDBContext.ToListAsync());
-        }
-
-        // GET: Posts
-        public async Task<IActionResult> UserPosts()
-        {
-            var uId =  _userManager.GetUserId(User);     
-            ViewData["CurrentUserId"] = uId;  
-            
-            var iSDBContext = _context.Posts
+            IQueryable<Post> ISDBContext = _context.Posts
                 .Include(p => p.Owner)
-                .Include(p => p.Type)  
+                .Include(p => p.Type)
                 .Include(p => p.Likes)
-                .OrderByDescending(p => p.DateCreated)
-                .Where(p => p.OwnerId == uId);
-            return View(await iSDBContext.ToListAsync());
+                .OrderByDescending(p => p.DateCreated);
+
+            if(cur){
+                ViewData["Title"] = "My Posts";
+               ISDBContext = ISDBContext.Where(p => p.OwnerId == uId);
+            }
+
+            return View(await ISDBContext.ToListAsync());
         }
 
         // GET: Posts/Details/5

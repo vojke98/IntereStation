@@ -37,6 +37,10 @@ namespace web.Data
                 .HasForeignKey(c => c.RequestedToId)
                 .OnDelete(DeleteBehavior.ClientNoAction)
                 .IsRequired();
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(p => p.Posts)
+                .WithOne(o => o.Owner);
         }
     }
 }

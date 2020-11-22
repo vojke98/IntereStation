@@ -1,0 +1,17 @@
+@model web.Models.Post
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<AppUser> UserManager
+
+@{var uId = UserManager.GetUserId(User);}
+
+@Html.DisplayFor(model => model.Likes.Count)
+<span>
+    <a href="@Url.Action("Create", "Likes", new { PostId =  Model.PostId})">
+        @if(!Model.Likes.Any(l => l.UserId.Equals(uId) && l.PostId == Model.PostId)){
+            <img class="like" style="height:28px; -webkit-filter: grayscale(100%);" src="@Url.Content("~/images/like.png")"> 
+        }else{
+            <img class="like" style="height:28px;" src="@Url.Content("~/images/like.png")"> 
+        }
+    </a>
+</span>
