@@ -10,11 +10,7 @@ using web.Data;
 namespace web.Migrations
 {
     [DbContext(typeof(ISDBContext))]
-<<<<<<< HEAD:web/Migrations/20201122111039_Initial.Designer.cs
-    [Migration("20201122111039_Initial")]
-=======
-    [Migration("20201122123257_Initial")]
->>>>>>> 2668864fb976eba472104742f925bc1f00ff1cbf:web/Migrations/20201122123257_Initial.Designer.cs
+    [Migration("20201122130131_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
