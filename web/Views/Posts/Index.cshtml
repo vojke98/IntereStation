@@ -41,7 +41,7 @@
                         string image = item.Image;
                         if(image != null && !image.Equals("")){
                             var postImg = "userFiles/" + item.OwnerId + "/" + item.PostId + "/" + image;
-                            <img src="~/@postImg" style="width:100%; height:auto;">
+                            <img src="~/@postImg" style="max-width:100%; height:auto;">
                         }
                     }
                 </div>
