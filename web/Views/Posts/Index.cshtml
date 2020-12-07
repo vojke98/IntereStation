@@ -15,7 +15,7 @@
 @foreach (var item in Model) {
         <tr>
         <td style="border-top-color:#121212;">
-            <div class="container" style="width:70%; background-color:#242424; border-radius:10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+            <div class="container" style="width:80%; background-color:#242424; border-radius:10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                 <div class="row" style="padding-left:0px">
                     <div class="col align-self-start" style="padding-left:0px">
                         <a href="@Url.Action("Details", "AppUsers", new { id=item.OwnerId })">
@@ -32,7 +32,7 @@
                         </a>
                         <span style="color:gray; font-size:70%;">@item.Type.Name</span>
                     </div>
-                    <span style="margin-right:10px; margin-top:5px; color:gray; font-size:80%; float:right;">
+                    <span style="margin-right:10px; margin-top:5px; color:gray; font-size:70%; float:right;">
                         Shared at @Html.DisplayFor(modelItem => item.DateCreated)
                     </span>
                 </div>
@@ -41,7 +41,7 @@
                         string image = item.Image;
                         if(image != null && !image.Equals("")){
                             var postImg = "userFiles/" + item.OwnerId + "/" + item.PostId + "/" + image;
-                            <img src="~/@postImg" style="max-height:100%; width:100%; height:auto; object-fit:cover;">
+                            <img src="~/@postImg" style="width:100%; height:auto;">
                         }
                     }
                 </div>
