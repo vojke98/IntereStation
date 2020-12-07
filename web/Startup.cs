@@ -30,7 +30,7 @@ namespace web
             services.AddControllersWithViews();
     
             services.AddDbContext<ISDBContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ISDBConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("AzureISDBConnection")));
 
             services.AddIdentity<AppUser, IdentityRole>(options => 
                 options.Stores.MaxLengthForKeys = 128)
