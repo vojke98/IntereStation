@@ -30,7 +30,8 @@ namespace web
             services.AddControllersWithViews();
     
             services.AddDbContext<ISDBContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AzureISDBConnection")));
+                //options.UseSqlServer(Configuration.GetConnectionString("AzureISDBConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("ISDBConnection")));
 
             services.AddIdentity<AppUser, IdentityRole>(options => 
                 options.Stores.MaxLengthForKeys = 128)
@@ -38,11 +39,15 @@ namespace web
                 .AddDefaultUI()
                 .AddDefaultTokenProviders()
                 .AddRoles<IdentityRole>();
+            
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseDeveloperExceptionPage();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -68,6 +73,12 @@ namespace web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Interestation API V1");
             });
         }
     }

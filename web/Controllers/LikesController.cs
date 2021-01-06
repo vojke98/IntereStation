@@ -26,14 +26,15 @@ namespace web.Controllers
         public async Task<IActionResult> Create(int PostId)
         {
             var UserId = _userManager.GetUserId(User);
-            Like like = new Like{ UserId = UserId, PostId = PostId };
 
-            Like likeExists = await _context.Likes.FindAsync(UserId, PostId);
+            //Like likeExists = await _context.Likes.FindAsync(UserId, PostId);
+            Like likeExists = _context.Likes.Where(l => l.UserId == UserId && l.PostId == PostId).FirstOrDefault();
 
             if (ModelState.IsValid)
             {
                 if(likeExists == null)
                 {
+                    Like like = new Like{ UserId = UserId, PostId = PostId };
                     _context.Add(like);
                 }else
                 {
