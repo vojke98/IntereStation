@@ -20,7 +20,7 @@ namespace web.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Like>().HasKey(l => new { l.UserId, l.PostId });
+            //modelBuilder.Entity<Like>().HasKey(l => new { l.UserId, l.PostId });
             modelBuilder.Entity<User_Interest>().HasKey(ui => new { ui.UserId, ui.InterestId });
             modelBuilder.Entity<Friend>().HasKey(f => new { f.RequestedById, f.RequestedToId });
 
