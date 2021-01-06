@@ -10,7 +10,7 @@ using web.Models;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/User")]
+    [Route("api/v1/Users")]
     [ApiController]
     public class UsersApiController : ControllerBase
     {

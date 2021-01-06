@@ -10,7 +10,7 @@ using web.Models;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/Like")]
+    [Route("api/v1/Likes")]
     [ApiController]
     public class LikesApiController : ControllerBase
     {
