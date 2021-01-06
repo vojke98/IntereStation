@@ -250,12 +250,13 @@ namespace web.Migrations
                 name: "Likes",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
+                    LikeId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
                     PostId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Likes", x => new { x.UserId, x.PostId });
+                    table.PrimaryKey("PK_Likes", x => x.LikeId);
                     table.ForeignKey(
                         name: "FK_Likes_Posts_PostId",
                         column: x => x.PostId,
@@ -267,7 +268,7 @@ namespace web.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -318,6 +319,11 @@ namespace web.Migrations
                 name: "IX_Likes_PostId",
                 table: "Likes",
                 column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Likes_UserId",
+                table: "Likes",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_OwnerId",

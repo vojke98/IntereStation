@@ -3,38 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using web.Data;
 
 namespace web.Migrations
 {
     [DbContext(typeof(ISDBContext))]
-    [Migration("20210106205230_Initial")]
-    partial class Initial
+    partial class ISDBContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Like", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "PostId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("Likes");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -287,6 +270,27 @@ namespace web.Migrations
                     b.ToTable("Interests");
                 });
 
+            modelBuilder.Entity("web.Models.Like", b =>
+                {
+                    b.Property<Guid>("LikeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LikeId");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Likes");
+                });
+
             modelBuilder.Entity("web.Models.Post", b =>
                 {
                     b.Property<int>("PostId")
@@ -332,21 +336,6 @@ namespace web.Migrations
                     b.HasIndex("InterestId");
 
                     b.ToTable("User_Interests");
-                });
-
-            modelBuilder.Entity("Like", b =>
-                {
-                    b.HasOne("web.Models.Post", "Post")
-                        .WithMany("Likes")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("web.Models.AppUser", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -413,6 +402,19 @@ namespace web.Migrations
                         .HasForeignKey("RequestedToId")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("web.Models.Like", b =>
+                {
+                    b.HasOne("web.Models.Post", "Post")
+                        .WithMany("Likes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("web.Models.AppUser", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("web.Models.Post", b =>
