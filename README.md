@@ -24,8 +24,8 @@ Slika 3 Profil iskanekga uporabnika
 
 ![](images/4.png)
 Slika 4 Profil trenutnega uporabnika
-
-
+\
+\
 
 ![](images/5.png)
 Slika 5 Prošnje za prijateljstvo
