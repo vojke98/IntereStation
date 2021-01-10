@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using web.Data;
+using web.Filters;
 using web.Models;
 
 namespace web.Controllers_Api
 {
     [Route("api/v1/Likes")]
     [ApiController]
+    [ApiKeyAuth]
     public class LikesApiController : ControllerBase
     {
         private readonly ISDBContext _context;

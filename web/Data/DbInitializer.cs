@@ -117,6 +117,30 @@ namespace web.Data
                 
             }
 
+            user = new AppUser
+            {
+                FirstName = "Dino",
+                LastName = "Čeliković",
+                Email = "nodi@gmail.com",
+                NormalizedEmail = "NODI@GMAIL.COM",
+                UserName = "nodi",
+                NormalizedUserName = "nodi",
+                PhoneNumber = "+38670111111",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString("D")
+            };
+
+            if (!context.Users.Any(u => u.UserName == user.UserName))
+            {
+                var password = new PasswordHasher<AppUser>();
+                var hashed = password.HashPassword(user,"#Pass123");
+                user.PasswordHash = hashed;
+                context.Users.Add(user);
+                context.SaveChanges();
+                
+            }
+
             var UserRoles = new IdentityUserRole<string>[]
             {
                 new IdentityUserRole<string>{RoleId = roles[0].Id, UserId=user.Id},
