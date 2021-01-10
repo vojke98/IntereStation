@@ -9,17 +9,17 @@ Z informacijskim sistemom IntereStation smo naredili enostavno verzijo družbene
 
 Zaslonske slike grafičnega vmesnika:
 <br><br>
-![](images/1.png)
+![](images/WebApp1.png)
 Slika 1 Začetna stran (Web App)
 <br><br><br>
-![](images/3.png)
+![](images/WebApp2.png)
 Slika 2 Iskanje uporabnikov (Web App)
 <br><br><br>
-![](images/2.png)
+![](images/WebApp3.png)
 Slika 3 Prošnje za prijateljstvo (Web App)
 <br><br><br>
-![](images/4.png)
+![](images/WebApp4.png)
 Slika 4 Delitev objave (Web App)
 <br><br><br>
-![](images/5.png)
+![](images/AndroidClient5.png)
 Slika 5 Začetna stran (Android Client) - Like
