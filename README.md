@@ -10,17 +10,22 @@ Z informacijskim sistemom IntereStation smo naredili enostavno verzijo družbene
 ![](images/1.png)
 Slika 1 Začetna stran
 
+
 ![](images/3.png)
 Slika 2 Iskanje uporabnikov
+
 
 ![](images/2.png)
 Slika 3 Profil iskanekga uporabnika
 
+
 ![](images/4.png)
 Slika 4 Profil trenutnega uporabnika
 
+
 ![](images/5.png)
 Slika 5 Prošnje za prijateljstvo
+
 
 ![](images/6.png)
 Slika 6 Delitev objav
