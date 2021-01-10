@@ -23,3 +23,7 @@ Slika 4 Delitev objave (Web App)
 <br><br><br>
 ![](images/AndroidClient5.png) <br>
 Slika 5 Začetna stran (Android Client) - Like
+<br><br><br><br>
+Podatkovni model:
+<br><br>
+![](images/DbDiagram.png) <br>
