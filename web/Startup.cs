@@ -30,7 +30,7 @@ namespace web
             services.AddControllersWithViews();
     
             services.AddDbContext<ISDBContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AzureISDBConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("Azure2ISDBConnection")));
                 //options.UseSqlServer(Configuration.GetConnectionString("ISDBConnection")));
 
             services.AddIdentity<AppUser, IdentityRole>(options => 
